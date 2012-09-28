@@ -26,8 +26,8 @@
 	-d <string>   	delimiter for RQA file, default=TAB
 	
 	
-	Copyright (C) 2008 Stefan Schinkel, University of Potsdam
-	http://www.agnld.uni-potsdam.de/~schinkel  
+	Copyright (C) 2009-2012 Stefan Schinkel, HU Berlin
+	http://www.people.physik.hu-berlin.de/~schinkel  
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -42,9 +42,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-	$Log: rqaGUI.py,v $
-	Revision 1.1.1.1  2008/08/11 11:44:59  schinkel
-	Initial Import
+
 
 
 
@@ -285,7 +283,7 @@ def runRQA():
 			return
 		
 		if lengthX == 1 or lengthY == 1:
-			showerror("Data Error","Please provide data als columns.")
+			showerror("Data Error","Please provide data as columns.")
 			return
 		
 		if ws > lengthX:
@@ -530,26 +528,32 @@ if __name__ == '__main__':
 		print "Could not the pylab/matplotlib module"
 		print "Please visit http://matplotlib.sourceforge.net/  and install the module."
 		print "Without this module plotting of RPs/RQA  will not be possible."
-		disablePlotButton = 1;
+		disableShowButton = 1;
 	
 
 	# check $PATH for binary, exception needed in 
 	# case $PATH contains nonexistent directories	
 	rpBin = "";
-	
+
+    	if os.name  == 'nt':
+	 	# print "working on windows"
+		binaryName = 'rp.exe'
+    	else:
+		binaryName = 'rp'
 	try:
 		for d in os.environ['PATH'].split(':'):
-			if 'rp' in os.listdir(d):
-				rpBin = "%s/rp" % d
+			if binaryName in os.listdir(d):
+				rpBin = "%s/%s" % (d,binaryName)
 				break 
 	except:
 		pass
 	
 	# check PWD for binary				
 	if len(rpBin) == 0:
-		if 'rp' in os.listdir(os.getcwd()):
-			rpBin = "%s/rp" % os.getcwd()			
-	
+		if binaryName in os.listdir(os.getcwd()):
+			rpBin = "%s/%s" % (os.getcwd(),binaryName)			
+
+	print "Info: Will use the binary file:  " + rpBin
 	# if binary found, check if exectuable
 	if len(rpBin) != 0:
 		st = os.stat(rpBin)
@@ -567,10 +571,10 @@ if __name__ == '__main__':
 		print "------- Error: Binary not found --------"
 		print "Could not find the binary in your $PATH or the current directory"
 		print "Make sure to have downloaded the binary for your plattform from:"
-		print "http://www.agnld.uni-potsdam.de/~marwan/6.download/rp.php ."
+		print "http://tocsy.pik-potsdam.de/crp.php"
 		print "Store the file in an accessible place your $PATH or the directory this"
-		print "programme is in and make sure to have it renamed 'rp'"
-		print "The GUI only searches your PATH or the folder this programme is in."
+		print "programme is in and make sure to have it renamed 'rp' ('rp.exe' on Windows)"
+		print "The GUI only searches your $PATH or the folder this programme is in."
 		sys.exit(-1)				
 
 	
@@ -694,27 +698,27 @@ if __name__ == '__main__':
 	row5.pack(side=TOP,fill=X, expand=YES)
 
 	### add buttons
+	if not disableShowButton:
+		# show RP only if PIL available
+		showRPbutton = Button(app, text='Show RP', command=showRP).pack(side=LEFT)
 
-	# show RP only if PIL available
-	showRPbutton = Button(app, text='Show RP', command=showRP).pack(side=LEFT)
+		# Run Rqa can 
+		Button(app, text='Run RQA', command = runRQA).pack(side=LEFT)
 
-	# Run Rqa can 
-	Button(app, text='Run RQA', command = runRQA).pack(side=LEFT)
-
-	# Plot button
-	plotRQAbutton = Button(app, text='Plot:', command = plotData).pack(side=LEFT)
-	plotOpts = ["RR","DET","DET/RR","LAM","LAM/DET","L_max","L","L_entr","DIV","V_max",
-				"TT","V_entr","T1","T2","W_max","W_mean","W_entr","W_prob","F_min"]
-	plotMeasure.set(plotOpts[0]) # default to RR			
-	OptionMenu(app,plotMeasure,*plotOpts).pack(side=LEFT)
+		# Plot button
+		plotRQAbutton = Button(app, text='Plot:', command = plotData).pack(side=LEFT)
+		plotOpts = ["RR","DET","DET/RR","LAM","LAM/DET","L_max","L","L_entr","DIV","V_max",
+					"TT","V_entr","T1","T2","W_max","W_mean","W_entr","W_prob","F_min"]
+		plotMeasure.set(plotOpts[0]) # default to RR			
+		OptionMenu(app,plotMeasure,*plotOpts).pack(side=LEFT)
 
 	## close and help button
 	Button(app, text='Quit', command = app.destroy).pack(side=RIGHT)
 	Button(app, text='Help', command = showHelp).pack(side=RIGHT)
 
-	if disableShowButton:
-		showRPbutton.itemconfig(state=DISABLED)
-		plotRQAbutton.itemconfig(state=DISABLED)		
+	# if disableShowButton:
+	# 	showRPbutton.itemconfig(state=DISABLED)
+	# 	plotRQAbutton.itemconfig(state=DISABLED)		
 
 	#run GUI
 	app.mainloop()
