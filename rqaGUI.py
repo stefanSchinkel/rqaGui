@@ -471,7 +471,6 @@ def plotData():
         pylab.title(plotTitle)
         pylab.show()
 
-
         return
 
 
@@ -497,16 +496,17 @@ these plots in a file.
 # actually, it shouldn't be imported, but still
 if __name__ == '__main__':
 
-    ## common vars
+    # common vars
     global debug, overrideAsk, waitbar
     flagDistancePlot = False
     disableShowButton = 0
-    overrideAsk = 0;
+    overrideAsk = 0
 
     # modules to call binary and handle files
-    import os,sys,stat,os.path
+    import os, sys, stat, os.path
 
 
+    print sys.path
     # the tk stuff
     try:
         from Tkinter import *
@@ -528,12 +528,12 @@ if __name__ == '__main__':
         print "Could not the pylab/matplotlib module"
         print "Please visit http://matplotlib.sourceforge.net/  and install the module."
         print "Without this module plotting of RPs/RQA  will not be possible."
-        disableShowButton = 1;
+        disableShowButton = 1
 
 
     # check $PATH for binary, exception needed in
     # case $PATH contains nonexistent directories
-    rpBin = "";
+    rpBin = ""
 
     if os.name  == 'nt':
         # print "working on windows"
@@ -552,7 +552,7 @@ if __name__ == '__main__':
     # check PWD for binary
     if len(rpBin) == 0:
         if binaryName in os.listdir(os.getcwd()):
-            rpBin = "%s/%s" % (os.getcwd(),binaryName)
+            rpBin = "%s/%s" % (os.getcwd(), binaryName)
 
     print "Info: Will use the binary file:  " + rpBin
     # if binary found, check if exectuable
@@ -585,46 +585,59 @@ if __name__ == '__main__':
 
     # mainGUI
     app = Tk()
-    app.geometry("420x450+50+50");
-    app.title("Graphical RQA interface");
+    app.geometry("420x450+50+50")
+    app.title("Graphical RQA interface")
 
     # declare vars
 
     # variables for files
-    app.data1 = StringVar();valData1Text = StringVar();
-    app.data2 = StringVar();valData2Text = StringVar();
-    app.out = StringVar();valResultText = StringVar();
+    app.data1 = StringVar()
+    valData1Text = StringVar()
+    app.data2 = StringVar()
+    valData2Text = StringVar()
+    app.out = StringVar()
+    valResultText = StringVar()
+
     # vars for RP/RQA params
-    valMethod = StringVar();
-    valVariant = StringVar();
-    c1=StringVar();c1.set(1);   #dim
-    c2=StringVar();c2.set(1);   #tau
-    c3=StringVar();c3.set(1);   #epsilon
-    c4=StringVar();c4.set(1);   #theiler
-    c5=StringVar();c5.set(2);   #lmin
-    c6=StringVar();c6.set(2);   #vmin
-    distPlot=IntVar();          # make distance plot ?
-    ws = StringVar();           # windowsize
-    ss = StringVar();           # stepsize
+    valMethod = StringVar()
+    valVariant = StringVar()
+    c1 = StringVar()  #dim
+    c1.set(1)
+    c2 = StringVar()  #tau
+    c2.set(1)
+    c3 = StringVar()  #epsilon
+    c3.set(1)
+    c4 = StringVar()  #theiler
+    c4.set(1)
+    c5 = StringVar()  #lmin
+    c5.set(2)
+    c6 = StringVar()  #vmin
+    c6.set(2)
+
+    distPlot = IntVar()          # make distance plot ?
+    ws = StringVar()           # windowsize
+    ss = StringVar()           # stepsize
     plotMeasure = StringVar()   # measure for plot
 
     # title and seperator
-    Label(app, text='Commandline Recurrence Plots - Graphical User Interface').pack(fill=X,pady=2)
+    Label(app, text='Commandline Recurrence Plots - Graphical User Interface').pack(fill=X, pady=2)
 
     # split GUI in 3 parts
-    topFrame = Frame(app, borderwidth=2, relief=GROOVE);topFrame.pack(padx=2,pady=2,fill=X);
-    midFrame = Frame(app,borderwidth=2,relief=GROOVE);midFrame.pack(padx=2,pady=2, fill=X);
-    botFrame = Frame(app, borderwidth=2,relief=GROOVE);botFrame.pack(padx=2,pady=2,fill=X);
+    topFrame = Frame(app, borderwidth=2, relief=GROOVE)
+    topFrame.pack(padx=2, pady=2, fill=X)
+    midFrame = Frame(app,borderwidth=2, relief=GROOVE)
+    midFrame.pack(padx=2,pady=2, fill=X)
+    botFrame = Frame(app, borderwidth=2, relief=GROOVE)
+    botFrame.pack(padx=2,pady=2, fill=X)
 
-    ## topframe
+    ##topframe
+    Label(topFrame, anchor=W, font=("Helvetica", 12, "italic"), text='Input:').pack(fill=X)
 
-    Label(topFrame,anchor=W, font=("Helvetica", 12, "italic"), text='Input:').pack(fill=X)
-
-    rowData1 = Frame(topFrame,border=1, pady=1)
-    Label(rowData1,text='Data file 1:').pack(side=LEFT)
-    Entry(rowData1,width=35, textvariable=valData1Text).pack(side=LEFT,fill=X)
+    rowData1 = Frame(topFrame, border=1, pady=1)
+    Label(rowData1, text='Data file 1:').pack(side=LEFT)
+    Entry(rowData1, width=35, textvariable=valData1Text).pack(side=LEFT, fill=X)
     Button(rowData1, text='Browse', command=(lambda x='data1', y='valData1Text': getFile(x,y))).pack(side=RIGHT)
-    rowData1.pack(side=TOP,fill=X, expand=YES)
+    rowData1.pack(side=TOP, fill=X, expand=YES)
 
     # dataFile 2
     rowData2 = Frame(topFrame,border=1, pady=1)
@@ -640,54 +653,58 @@ if __name__ == '__main__':
 
     rowResult = Frame(topFrame, border=1, pady=1)
     Label(rowResult, text='Result file:').pack(side=LEFT)
-    Entry(rowResult,width=35, textvariable=valResultText).pack(side=LEFT,fill=X)
-    Button(rowResult, text='Browse', command=(lambda x='out', y='valResultText' : getSaveFile(x,y))).pack(side=RIGHT)
-    rowResult.pack(side=TOP,fill=X, expand=YES)
+    Entry(rowResult, width=35, textvariable=valResultText).pack(side=LEFT,fill=X)
+    Button(rowResult, text='Browse', command=(lambda x='out', y='valResultText' : getSaveFile(x, y))).pack(side=RIGHT)
+    rowResult.pack(side=TOP, fill=X, expand=YES)
 
     ## midframe
     # numeric params
     Label(midFrame, anchor=W, font=("Helvetica", 12, "italic"), text='RP Parameters:').pack(fill=X)
     row1 = Frame(midFrame, border=1, pady=2)
     Label(row1, width=10, text='Dimension :').pack(side=LEFT)
-    valDim = Entry(row1, width=2, textvariable=c1);valDim.pack(side=LEFT)
+    valDim = Entry(row1, width=2, textvariable=c1)
+    valDim.pack(side=LEFT)
     Label(row1, width=10, text='Delay :').pack(side=LEFT)
-    valTau = Entry(row1, width=2, textvariable=c2);valTau.pack(side=LEFT)
-    Label(row1,width=10, text='Threshold:').pack(side=LEFT)
-    valEpsilon = Entry(row1, width=4, textvariable=c3);valEpsilon.pack(side=LEFT)
-    row1.pack(side=TOP,fill=X, expand=YES)
+    valTau = Entry(row1, width=2, textvariable=c2)
+    valTau.pack(side=LEFT)
+    Label(row1, width=10, text='Threshold:').pack(side=LEFT)
+    valEpsilon = Entry(row1, width=4, textvariable=c3)
+    valEpsilon.pack(side=LEFT)
+    row1.pack(side=TOP, fill=X, expand=YES)
 
     # methods
     row2 = Frame(midFrame, border=1,pady=2)
     Label(row2, text='Method: ').pack(side=LEFT)
-    OptionMenu(row2, valMethod, 'Euclidian Norm','Maximum Norm','Minium Norm','Order Patterns').pack(side=LEFT)
+    OptionMenu(row2, valMethod, 'Euclidian Norm', 'Maximum Norm',
+        'Minium Norm', 'Order Patterns').pack(side=LEFT)
     valMethod.set('Euclidean Norm')
-    row2.pack(side=TOP,fill=X, expand=YES)
+    row2.pack(side=TOP, fill=X, expand=YES)
 
     # RP/CRP/JRP
     row3 = Frame(midFrame, border=1,pady=2)
     Label(row3, text='RP type: ').pack(side=LEFT)
-    OptionMenu(row3, valVariant, 'RP','CRP','JRP').pack(side=LEFT)
+    OptionMenu(row3, valVariant, 'RP', 'CRP', 'JRP').pack(side=LEFT)
     valVariant.set('RP')
-    row3.pack(side=TOP,fill=X, expand=YES)
+    row3.pack(side=TOP, fill=X, expand=YES)
 
-
-
-    ## bottomframe
+    #bottomframe
 
     # Theiler etc.
     Label(botFrame, anchor=W, font=("Helvetica", 12, "italic"), text='RQA Parameters:').pack(fill=X)
 
     row4 = Frame(botFrame, border=1, pady=2)
     Label(row4, width=10, text='Theiler :', anchor=W).pack(side=LEFT)
-    valTheiler = Entry(row4, width=2, textvariable=c4);valTheiler.pack(side=LEFT)
+    valTheiler = Entry(row4, width=2, textvariable=c4)
+    valTheiler.pack(side=LEFT)
     Label(row4, width=10, text='min. Diag :').pack(side=LEFT)
-    valLmin = Entry(row4, width=2, textvariable=c5);valLmin.pack(side=LEFT)
+    valLmin = Entry(row4, width=2, textvariable=c5)
+    valLmin.pack(side=LEFT)
     Label(row4, width=10, text='min. Vert :').pack(side=LEFT)
-    valVmin = Entry(row4, width=2, textvariable=c6);valVmin.pack(side=LEFT)
-    row4.pack(side=TOP,fill=X, expand=YES)
+    valVmin = Entry(row4, width=2, textvariable=c6)
+    valVmin.pack(side=LEFT)
+    row4.pack(side=TOP, fill=X, expand=YES)
 
     # windowed RQA
-
     Label(botFrame, anchor=W, font=("Helvetica", 12, "italic"), text='Windowed Analysis:').pack(fill=X)
     row5 = Frame(botFrame, border=1, pady=2)
     Label(row5, width=12, text='Window Size :', anchor=W).pack(side=LEFT)
@@ -704,18 +721,19 @@ if __name__ == '__main__':
         showRPbutton = Button(app, text='Show RP', command=showRP).pack(side=LEFT)
 
         # Run Rqa can
-        Button(app, text='Run RQA', command = runRQA).pack(side=LEFT)
+        Button(app, text='Run RQA', command=runRQA).pack(side=LEFT)
 
         # Plot button
         plotRQAbutton = Button(app, text='Plot:', command = plotData).pack(side=LEFT)
-        plotOpts = ["RR","DET","DET/RR","LAM","LAM/DET","L_max","L","L_entr","DIV","V_max",
-                    "TT","V_entr","T1","T2","W_max","W_mean","W_entr","W_prob","F_min"]
-        plotMeasure.set(plotOpts[0]) # default to RR
-        OptionMenu(app,plotMeasure,*plotOpts).pack(side=LEFT)
+        plotOpts = ["RR", "DET", "DET/RR", "LAM", "LAM/DET", "L_max", "L",
+                    "L_entr", "DIV", "V_max", "TT", "V_entr", "T1", "T2",
+                    "W_max", "W_mean", "W_entr", "W_prob", "F_min"]
+        plotMeasure.set(plotOpts[0])  # default to RR
+        OptionMenu(app, plotMeasure, *plotOpts).pack(side=LEFT)
 
     ## close and help button
-    Button(app, text='Quit', command = app.destroy).pack(side=RIGHT)
-    Button(app, text='Help', command = showHelp).pack(side=RIGHT)
+    Button(app, text='Quit', command=app.destroy).pack(side=RIGHT)
+    Button(app, text='Help', command=showHelp).pack(side=RIGHT)
 
     # if disableShowButton:
     #   showRPbutton.itemconfig(state=DISABLED)
@@ -723,5 +741,3 @@ if __name__ == '__main__':
 
     #run GUI
     app.mainloop()
-
-
