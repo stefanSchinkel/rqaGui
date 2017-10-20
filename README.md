@@ -1,27 +1,27 @@
-##rqaGui
+## rqaGui
  a simple python GUI frontend for commandline Recurrence Plots
 
-###About:
+### About:
 
 The rqaGUI provides a Graphical Frontend (GUI) to the [Commandline Recurrence Plot Binary](http://tocsy.pik-potsdam.de/commandline-rp.php). It is a thin Python wrapper meant to ease the interaction with the commandline tool that allows for interactive setting of the parameters and a visualisation of RPs and RQA measures.
 
-###Contents:
+### Contents:
 
   * rqaGui.py - the thing as such
   * Progressbar.py - simple, homegrown progressbar
 
-###Requirements:
+### Requirements:
 
   * the [RP Binary](http://tocsy.pik-potsdam.de/commandline-rp.php) (obviously)
   * Python 2.7 (worked on 2.4 and 2.6 too)
   * TKinter -Python's  standard GUI, should come w/ your distribution
   * matplotlib (only if you want to plot things, not  for data crunching)
 
-###Known Issues:
+### Known Issues:
 
 On windows there are occasionally problems with piping to the binary, let me know if you have trouble
 
-###Installation:
+### Installation:
 
 Make sure  Python with TKinter (and matplotlib if desired) are installed and working.
 
